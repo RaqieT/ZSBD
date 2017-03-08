@@ -1,3 +1,3 @@
 # ZSBD
-Instrukcje na ZSBD
-PŁ
+## Instrukcje na ZSBD
+### Politechnika Łódzka
