@@ -47,16 +47,16 @@ print 'Nazwa oddzialu to: ' +  @tempquery;
 --8
 DECLARE @I INT
 DECLARE @n varchar(30)
-declare kur SCROLL cursor for 
+declare kur SCROLL cursor forÂ 
 select nr_odd,nazwa_odd from oddzialy ORDER BY nr_odd
 OPEN kur;
 FETCH NEXT FROM kur INTO @I, @n;
 WHILE @@FETCH_STATUS=0
 	BEGIN
-    PRINT 'numer oddzialu ' + cast(@I as varchar) + ' nazwa oddzialu ' + @n;
-    FETCH NEXT FROM kur INTO @I, @n;
-    END
-CLOSE kur   
+Â Â Â Â PRINT 'numer oddzialu ' + cast(@I as varchar) + ' nazwa oddzialu ' + @n;
+Â Â Â Â FETCH NEXT FROM kur INTO @I, @n;
+Â Â Â Â END
+CLOSE kurÂ Â  
 DEALLOCATE kur
 
 --9
@@ -65,28 +65,28 @@ Insert into oddzialy values ( 3, 'malowanie')
 declare @x int
 declare @counter int
 set @counter = 0;
-declare kur SCROLL cursor for 
+declare kur SCROLL cursor forÂ 
 select nr_odd from oddzialy ORDER BY nr_odd
 OPEN kur;
 FETCH NEXT FROM kur INTO @x;
 WHILE @@FETCH_STATUS=0
 	BEGIN
-     if @x > 2 
+Â Â Â Â  if @x > 2 
 		begin
 		DELETE FROM oddzialy where nr_odd = @x;
 		set @counter= @counter + 1;
 		END
-    FETCH NEXT FROM kur INTO @x;
-    END
+Â Â Â Â FETCH NEXT FROM kur INTO @x;
+Â Â Â Â END
 print 'usuniete oddzialy ' + cast(@counter as varchar(2))
-CLOSE kur   
+CLOSE kurÂ Â  
 DEALLOCATE kur
 
 --10
 declare @d int
 declare @bylemWIfie int
 set @bylemWIfie = 0
-declare kur SCROLL cursor for 
+declare kur SCROLL cursor forÂ 
 select nr_odd from oddzialy ORDER BY nr_odd
 OPEN kur;
 FETCH NEXT FROM kur INTO @d;
@@ -98,9 +98,9 @@ WHILE @@FETCH_STATUS=0
 				set @bylemWIfie = 1
 			END
 	
-    FETCH NEXT FROM kur INTO @d;
-    END
-CLOSE kur   
+Â Â Â Â FETCH NEXT FROM kur INTO @d;
+Â Â Â Â END
+CLOSE kurÂ Â  
 DEALLOCATE kur
 IF @bylemWIfie = 0
 BEGIN
