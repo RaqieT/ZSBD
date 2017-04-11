@@ -1,5 +1,5 @@
 ---- 1
---PRINT 'Czeœæ, to ja';
+--PRINT 'CzeÅ›Ä‡, to ja';
 
 -- 2
 DECLARE @ZMIENNA INT;
