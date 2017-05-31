@@ -55,8 +55,8 @@ CONSTRAINT pil_druzyny_FK FOREIGN KEY(id_lekarza) REFERENCES przychodnia..lekarz
 
 GO
 
-CREATE TABLE przychodnia..wizyta (
-id_wizyty INT IDENTITY(1,1) CONSTRAINT wizytka_PK PRIMARY KEY,
+CREATE TABLE przychodnia..wizyty (
+id_wizyty INT IDENTITY(1,1) CONSTRAINT wizyta_PK PRIMARY KEY,
 id_pacjenta INT,
 id_lekarza INT,
 opis VARCHAR(500),
