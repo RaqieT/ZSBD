@@ -59,16 +59,16 @@ INSERT INTO pacjenci(id_lekarza,imie,nazwisko,PESEL) VALUES
 
 --wizyty
 INSERT INTO wizyty(id_pacjenta,id_lekarza,opis,data_wizyty) VALUES
-(1,1,'Wykryto uczulenia na kilka zwierz¹t',2016/05/21),
-(1,1,'Powstanie dodatkowego uczulenia',2016/06/20),
-(2,1,'Brak jakichkolwiek uczuleñ',2016/07/01),
-(2,2,'Nasilaj¹ce siê bóle ucha',2016/05/15),
-(3,2,'Wykryto kilka alergii na roœliny i zwierzêta',2016/08/07),
-(4,3,'Wysoka gor¹czka, dreszcze, kaszel, bóle g³owy',2016/09/29),
-(5,4,'Bóle serca, nasilaj¹ce siê',2016/05/29),
-(6,4,'Ostry ból gard³a',2016/12/12),
-(4,4,'Wysoka gor¹czka, bóle g³owy',2017/01/04),
-(1,4,'Pacjent symulowa³',2017/01/05)
+(1,1,'Wykryto uczulenia na kilka zwierz¹t','2016/05/21'),
+(1,1,'Powstanie dodatkowego uczulenia','2016/06/20'),
+(2,1,'Brak jakichkolwiek uczuleñ','2016/07/01'),
+(2,2,'Nasilaj¹ce siê bóle ucha','2016/05/15'),
+(3,2,'Wykryto kilka alergii na roœliny i zwierzêta','2016/08/07'),
+(4,3,'Wysoka gor¹czka, dreszcze, kaszel, bóle g³owy','2016/09/29'),
+(5,4,'Bóle serca, nasilaj¹ce siê','2016/05/29'),
+(6,4,'Ostry ból gard³a','2016/12/12'),
+(4,4,'Wysoka gor¹czka, bóle g³owy','2017/01/04'),
+(1,4,'Pacjent symulowa³','2017/01/05')
 
 --leki
 INSERT INTO leki(nazwa_leku) VALUES

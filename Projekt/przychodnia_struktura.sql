@@ -27,7 +27,7 @@ bonus_do_placy INT NOT NULL
 GO
 
 CREATE TABLE przychodnia..pokoje (
-nr_pokoju INT IDENTITY(1,1) CONSTRAINT pokoj_PK PRIMARY KEY,
+nr_pokoju INT CONSTRAINT pokoj_PK PRIMARY KEY,
 id_pracownika_zarzadzajacego INT NOT NULL,
 CONSTRAINT id_pracownika_zarzadzajacego_FK FOREIGN KEY(id_pracownika_zarzadzajacego) REFERENCES przychodnia..pracownicy(id_pracownika)
 );
@@ -67,9 +67,8 @@ CREATE TABLE przychodnia..wizyty (
 id_wizyty INT IDENTITY(1,1) CONSTRAINT wizyta_PK PRIMARY KEY,
 id_pacjenta INT NOT NULL,
 id_lekarza INT NOT NULL,
-nr_pokoju INT NOT NULL,
 opis VARCHAR(500),
-data_wizyty datetime,
+data_wizyty DATETIME NOT NULL,
 CONSTRAINT lek_wizyty_FK FOREIGN KEY(id_lekarza) REFERENCES przychodnia..lekarze(id_lekarza),
 CONSTRAINT pacjent_wizyty_FK FOREIGN KEY(id_pacjenta) REFERENCES przychodnia..pacjenci(id_pacjenta),
 CONSTRAINT nr_pokoju_wizyty_FK FOREIGN KEY(nr_pokoju) REFERENCES przychodnia..pokoje(nr_pokoju)
