@@ -75,3 +75,33 @@ CONSTRAINT pacjent_wizyty_FK FOREIGN KEY(id_pacjenta) REFERENCES przychodnia..pa
 CONSTRAINT nr_pokoju_wizyty_FK FOREIGN KEY(nr_pokoju) REFERENCES przychodnia..pokoje(nr_pokoju)
 );
 
+GO
+
+CREATE TABLE przychodnia..leki (
+id_leku INT IDENTITY(1,1) CONSTRAINT lek_PK PRIMARY KEY,
+nazwa_leku VARCHAR(32)
+);
+
+GO
+
+CREATE TABLE przychodnia..choroby (
+id_choroby INT IDENTITY(1,1) CONSTRAINT choroba_PK PRIMARY KEY,
+nazwa VARCHAR(32)
+);
+
+GO
+
+CREATE TABLE przychodnia..leki_choroby (
+id_leku INT NOT NULL,
+id_choroby INT NOT NULL,
+CONSTRAINT lek_choroby_FK FOREIGN KEY(id_leku) REFERENCES przychodnia..leki(id_leku),
+CONSTRAINT choroba_leku_FK FOREIGN KEY(id_choroby) REFERENCES przychodnia..choroby(id_choroby)
+);
+GO
+
+CREATE TABLE przychodnia..choroby_wizyty (
+id_wizyty INT NOT NULL,
+id_choroby INT NOT NULL,
+CONSTRAINT wizyta_choroby_FK FOREIGN KEY(id_wizyty) REFERENCES przychodnia..wizyty(id_wizyty),
+CONSTRAINT choroba_wiizyty_FK FOREIGN KEY(id_choroby) REFERENCES przychodnia..choroby(id_choroby)
+);
