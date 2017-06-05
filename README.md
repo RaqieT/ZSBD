@@ -1,2 +1,2 @@
 # Instrukcje na ZSBD PŁ
-Instrukcje na laboratoria z prof. Krzysztofem Myszkorowskim.
+Instrukcje oraz projekt na laboratoria z prof. Krzysztofem Myszkorowskim.
