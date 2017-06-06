@@ -103,3 +103,4 @@ id_choroby INT NOT NULL,
 CONSTRAINT wizyta_choroby_FK FOREIGN KEY(id_wizyty) REFERENCES przychodnia..wizyty(id_wizyty),
 CONSTRAINT choroba_wiizyty_FK FOREIGN KEY(id_choroby) REFERENCES przychodnia..choroby(id_choroby)
 );
+

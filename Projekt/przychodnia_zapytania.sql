@@ -146,7 +146,7 @@ INNER JOIN lekarze l ON w.id_lekarza = l.id_lekarza
 LEFT JOIN specjalizacje_lekarzy sl ON sl.id_lekarza = l.id_lekarza 
 WHERE sl.id_spec IS NULL AND DATEDIFF(d,w.data_wizyty ,GETDATE())/365.25 < 1
 
---14. lekarze zarabiajacy wiecej niz lekarz ktory ma najwiecej przyjec w ostatnim roku
+--14. lekarze zarabiajacy wiecej niz lekarz ktory ma najwiecej przyjec
 SELECT p.nazwisko AS 'Nazwisko'
 FROM pracownicy p, lekarze l
 WHERE
