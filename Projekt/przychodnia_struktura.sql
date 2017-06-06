@@ -20,7 +20,7 @@ GO
 
 CREATE TABLE przychodnia..specjalizacje (
 id_spec INT IDENTITY(1,1) CONSTRAINT spec_PK PRIMARY KEY,
-nazwa VARCHAR(20) NOT NULL,
+nazwa VARCHAR(20) NOT NULL UNIQUE,
 bonus_do_placy INT NOT NULL
 );
 
@@ -36,7 +36,7 @@ GO
 CREATE TABLE przychodnia..lekarze (
 id_lekarza INT IDENTITY(1,1) CONSTRAINT lekarz_PK PRIMARY KEY,
 id_pracownika INT NOT NULL,
-nr_pokoju INT NOT NULL,
+nr_pokoju INT NOT NULL UNIQUE,
 CONSTRAINT pracownik_lekarza_FK FOREIGN KEY(id_pracownika) REFERENCES przychodnia..pracownicy(id_pracownika),
 CONSTRAINT nr_pokoju_lekarza_FK FOREIGN KEY(nr_pokoju) REFERENCES przychodnia..pokoje(nr_pokoju)
 );

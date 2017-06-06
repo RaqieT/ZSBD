@@ -62,7 +62,7 @@ FROM pacjenci p
 
 --8. Alergie zdiagnozowane przez danego lekarza
 
-SELECT p.nazwisko, STUFF(
+SELECT p.nazwisko AS 'Nazwisko', STUFF(
                    (SELECT
                         ', ' + SUBSTRING(ch.nazwa,10,LEN(ch.nazwa)-9)
                         FROM  lekarze l, wizyty w, choroby_wizyty cw, choroby ch
@@ -87,10 +87,78 @@ WHERE
 	ch2.nazwa LIKE 'Alergia%' 
 GROUP BY p.nazwisko, p.id_pracownika
 
---9. wizyty z miesiacami ktore maja 31 dni
---10. place i nazwiska pracownikow ktorzy zarabiaja wiecej niz 50% sredniej placy lekarzy
---11. pacjentow urodzonych w roku przestepnym
---12. ile emerytow, dzieci i ludzi
---13. ile ludzikow odwiedzilo lekarza ktory nie ma zadnej specjalizacji, w ciagu jakiegos tam okresu czasu
---14. lekarze zarabiajacych wiecej niz lekarz ktory ma najwiecej przyjec w miesiacu
---15. leki najczesciej przepisywane (dla danej choroby)
+--9. wizyty ktore odbyly sie w miesiacu z liczba dni 30
+SELECT p.nazwisko AS 'Lekarz', pa.nazwisko AS 'Pacjent', w.opis AS 'Opis'
+FROM wizyty w, lekarze l, pracownicy p, pacjenci pa
+WHERE w.id_lekarza = l.id_lekarza AND p.id_pracownika = l.id_pracownika AND w.id_pacjenta = pa.id_pacjenta
+AND DAY(DATEADD(DD,-1,DATEADD(MM,DATEDIFF(MM,-1,w.data_wizyty),0))) = 30
+
+--10. place i nazwiska pracownikow (nie lekarzy) ktorzy zarabiaja wiecej niz 1/3 sredniej placy lekarzy
+SELECT p.nazwisko AS 'Nazwisko', p.placa AS 'Placa'
+FROM pracownicy p
+LEFT JOIN lekarze lek ON lek.id_pracownika = p.id_pracownika
+WHERE p.placa > (SELECT AVG(p2.placa)/3 FROM  pracownicy p2, lekarze l WHERE p2.id_pracownika = l.id_pracownika)
+AND lek.id_lekarza IS NULL
+
+--11. pacjenci urodzonych w roku przestepnym
+SELECT p.nazwisko AS 'Nazwisko'
+FROM pacjenci p 
+WHERE CAST(CONCAT(
+CASE 
+	WHEN SUBSTRING(p.PESEL,1,2) <= SUBSTRING(CAST(DATEPART(YY,GETDATE()) AS VARCHAR(4)),3,2)
+		THEN '20'
+	ELSE '19'
+END
+,SUBSTRING(p.PESEL,1,2)) AS FLOAT) / CAST(4 AS FLOAT) -
+CAST(CONCAT(
+CASE 
+	WHEN SUBSTRING(p.PESEL,1,2) <= SUBSTRING(CAST(DATEPART(YY,GETDATE()) AS VARCHAR(4)),3,2)
+		THEN '20'
+	ELSE '19'
+END
+,SUBSTRING(p.PESEL,1,2)) AS INT) / 4 = 0
+
+--12. ile emerytow (od 65 lat), dzieci (do 18 lat)
+SELECT COUNT(p1.id_pacjenta) AS 'Emeryci',
+	(SELECT COUNT(p2.id_pacjenta) FROM pacjenci p2 WHERE
+		DATEDIFF(YY,CAST(CONCAT(
+		CASE 
+			WHEN SUBSTRING(p2.PESEL,1,2) <= SUBSTRING(CAST(DATEPART(YY,GETDATE()) AS VARCHAR(4)),3,2)
+				THEN '20'
+			ELSE '19'
+		END
+		,SUBSTRING(p2.PESEL,1,2),'-',SUBSTRING(p2.PESEL,3,2),'-',SUBSTRING(p2.PESEL,5,2))AS DATE), CONVERT(datetimeoffset, GETDATE())) < 18
+) AS 'Dzieci'
+FROM pacjenci p1
+WHERE DATEDIFF(YY,CAST(CONCAT(
+CASE 
+	WHEN SUBSTRING(p1.PESEL,1,2) <= SUBSTRING(CAST(DATEPART(YY,GETDATE()) AS VARCHAR(4)),3,2)
+		THEN '20'
+	ELSE '19'
+END
+,SUBSTRING(p1.PESEL,1,2),'-',SUBSTRING(p1.PESEL,3,2),'-',SUBSTRING(p1.PESEL,5,2))AS DATE), CONVERT(datetimeoffset, GETDATE())) > 65
+
+--13. ile pacjentow odwiedzilo lekarza ktory nie ma zadnej specjalizacji, w ciagu jakiegos tam okresu czasu
+SELECT DISTINCT COUNT(p.id_pacjenta) AS 'Pacjenci lekarza bez spec. w ciagu ostatniego roku'
+FROM pacjenci p
+INNER JOIN wizyty w ON w.id_pacjenta = p.id_pacjenta
+INNER JOIN lekarze l ON w.id_lekarza = l.id_lekarza
+LEFT JOIN specjalizacje_lekarzy sl ON sl.id_lekarza = l.id_lekarza 
+WHERE sl.id_spec IS NULL AND DATEDIFF(d,w.data_wizyty ,GETDATE())/365.25 < 1
+
+--14. lekarze zarabiajacy wiecej niz lekarz ktory ma najwiecej przyjec w ostatnim roku
+SELECT p.nazwisko AS 'Nazwisko'
+FROM pracownicy p, lekarze l
+WHERE
+p.id_pracownika = l.id_pracownika AND
+p.placa > (SELECT TOP 1 best.placa FROM (
+SELECT TOP 1 p2.id_pracownika AS idprac, COUNT(w2.id_wizyty) AS wiz, p2.placa AS placa FROM pracownicy p2, lekarze l2, wizyty w2 WHERE
+p2.id_pracownika = l2.id_pracownika AND w2.id_lekarza = l2.id_lekarza GROUP BY p2.id_pracownika, placa ORDER BY wiz DESC) best)
+
+--15. pokoje, w ktorych stwierdzono Zapalenie ucha œrodkowego (przez lekarza specjaliste (taki ktory na specjalizacje)) lub Zapalenie p³uc (stwierdzone przez lekarza bez specjalizacji)
+SELECT pok.nr_pokoju AS 'Nr pokoju'
+FROM pokoje pok, lekarze l, wizyty w, choroby_wizyty cw, choroby c WHERE 
+l.nr_pokoju = pok.nr_pokoju AND w.id_lekarza = l.id_lekarza AND
+w.id_wizyty = cw.id_wizyty AND cw.id_choroby = c.id_choroby AND
+((c.nazwa = 'Zapalenie ucha œrodkowego' AND l.id_lekarza IN (SELECT sc.id_lekarza FROM specjalizacje_lekarzy sc)) 
+OR (c.nazwa = 'Zapalenie p³uc' AND l.id_lekarza NOT IN(SELECT sc.id_lekarza FROM specjalizacje_lekarzy sc)))

@@ -68,7 +68,7 @@ INSERT INTO wizyty(id_pacjenta,id_lekarza,opis,data_wizyty) VALUES
 (5,4,'Bóle serca, nasilaj¹ce siê','2016/05/29'),
 (6,4,'Ostry ból gard³a','2016/12/12'),
 (4,4,'Wysoka gor¹czka, bóle g³owy','2017/01/04'),
-(1,4,'Pacjent symulowa³','2017/01/05')
+(1,1,'Pacjent symulowa³','2017/01/05')
 
 --leki
 INSERT INTO leki(nazwa_leku) VALUES
@@ -100,6 +100,7 @@ INSERT INTO leki_choroby(id_leku,id_choroby) VALUES
 (2,1),
 (3,2),
 (3,3),
+(4,3),
 (3,4),
 (3,5),
 (3,6),
