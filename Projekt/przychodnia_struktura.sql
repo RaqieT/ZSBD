@@ -70,8 +70,7 @@ id_lekarza INT NOT NULL,
 opis VARCHAR(500),
 data_wizyty DATETIME NOT NULL,
 CONSTRAINT lek_wizyty_FK FOREIGN KEY(id_lekarza) REFERENCES przychodnia..lekarze(id_lekarza),
-CONSTRAINT pacjent_wizyty_FK FOREIGN KEY(id_pacjenta) REFERENCES przychodnia..pacjenci(id_pacjenta),
-CONSTRAINT nr_pokoju_wizyty_FK FOREIGN KEY(nr_pokoju) REFERENCES przychodnia..pokoje(nr_pokoju)
+CONSTRAINT pacjent_wizyty_FK FOREIGN KEY(id_pacjenta) REFERENCES przychodnia..pacjenci(id_pacjenta)
 );
 
 GO
